@@ -21,14 +21,14 @@ public:
 
 class Storage { //класс хранилище
 private:
-	Figure** objects;
+	Figure** objects;//указатель на указатель, так как адрес массива указателей
 	int size;//размер хранилища
 public:
-	Storage(int size) {
+	Storage(int size) {//создает массив указателей такой, как заданный размер хранилища
 		this->size = size;
 		objects = new Figure * [size];
 	}
-	void SetObject(int index, Figure* object) {//устанавливает в индексе памяти object
+	void SetObject(int index, Figure* object) {//помещает в индексе памяти object
 		objects[index] = object;
 	}
 	Figure& GetObject(int index) { //возвращает объект с индексом
@@ -37,7 +37,7 @@ public:
 	void delete_obj(int index) {//удаляет объект
 		objects[index]->~Figure();//тогда вызывается деструктор 
 	}
-	void add(Figure* object) {//добавляет объект 
+	void add(Figure* object) {//добавляет объект  в паямть с индексом 
 		Figure** object1 = new Figure * [size + 1];
 		for (int i = 0; i < size; i++)
 			object1[i] = objects[i];
@@ -51,7 +51,7 @@ public:
 		printf("%d", size - 1);
 		printf("\n\n");
 	}
-	int getCount() {
+	int getCount() {//нужна для вычисления размера хранилища
 		return size;
 	}
 };
@@ -61,11 +61,11 @@ class Point :public Figure {//класс наследник от класса Figure
 private:
 	int x, y;
 public:
-	Point() {
+	Point() {//конструктор по умолчанию
 		x = 0;
 		y = 0;
 	}
-	Point(int x, int y) {
+	Point(int x, int y) {//конструктор с параметрами
 		this->x = x;
 		this->y = y;
 	}
@@ -115,32 +115,32 @@ int main() {
 	setlocale(LC_ALL, "Rus");
 	Storage store(50);// создаем хранилищу с именем store
 	for (int i = 0; i < store.getCount(); i++) {
-		int a = rand() % 2 + 1;
+		int a = rand() % 2 + 1;//рандомные числа от 1 до 4
 		if (a == 2)
-			store.SetObject(i, new Point(rand() % 10, rand() % 10));
+			store.SetObject(i, new Point(rand() % 10, rand() % 10));//помещаем в память точку
 		else
-			store.SetObject(i, new Section());
+			store.SetObject(i, new Section());//помещаем в память отрезок
 	}
 	for (int i = 0; i < store.getCount(); i++) {
-		store.GetObject(i).show();
+		store.GetObject(i).show();//выводим на консоль все созданные объекты
 	}
 
 	printf("\n");
 	printf("%d", store.getCount());
-	printf(" - Размер хранилища \n\n");
-	unsigned int start_time = clock();
-	for (int i = 0; i < 100; i++) {
+	printf(" - Размер хранилища \n\n");//выводим размер хранилища
+	unsigned int start_time = clock(); //возвращает время, пройденное с момента запуска программы, вызвавшей фун­кцию clock()
+	for (int i = 0; i < 100; i++) {//цикл для 100 операций
 		int p = rand() % 4 + 1;
 		switch (p) {
-		case 1:
+		case 1://создание нового объекта
 			p = rand() % 2 + 1;
-			if (p == 1) {
+			if (p == 1) {//если p = 1 - создается точка
 				f = new Point(rand() % 10, rand() % 10);
 			}
-			else
+			else//иначе отрезок
 				f = new Section();
 			break;
-		case 2:
+		case 2://создание и добавления нового объекта в память
 			p = rand() % 2 + 1;
 			if (p == 1) {
 				f = new Point(rand() % 10, rand() % 10);
@@ -150,12 +150,12 @@ int main() {
 			store.add(f);
 			break;
 		case 3:
-			printf("Метод show\n");
+			printf("Метод show\n");//показ рандомного объекта из хранилища
 			store.GetObject(rand() % store.getCount()).show();
 			printf("\n");
 			break;
 		case 4:
-			store.delete_obj(rand() % store.getCount());
+			store.delete_obj(rand() % store.getCount());//удаление рандомного объекта из памяти
 			printf("\n");
 			break;
 		}
@@ -169,7 +169,7 @@ int main() {
 	system("cls");
 
 	start_time = clock();
-	for (int i = 0; i < 10000; i++) {
+	for (int i = 0; i < 1000; i++) {
 		int p = rand() % 4 + 1;
 		switch (p) {
 
@@ -215,7 +215,7 @@ int main() {
 
 
 	start_time = clock();
-	for (int i = 0; i < 1000; i++) {
+	for (int i = 0; i < 10000; i++) {
 		int p = rand() % 4 + 1;
 		switch (p) {
 
