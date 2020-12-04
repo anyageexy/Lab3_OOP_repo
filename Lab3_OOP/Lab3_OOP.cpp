@@ -18,7 +18,7 @@ public:
 	 ~Figure() {
 		printf("\nФигура удалена\n");
 	}
-};
+}; 
 
 class Storage {
 private:
