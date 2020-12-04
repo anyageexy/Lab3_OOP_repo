@@ -7,38 +7,37 @@
 
 using namespace std;
 
-class Figure {
+class Figure {//класс Figure
 public:
-	Figure() {
+	Figure() {//конструктор по умолчанию
 	}
-	virtual void show() {
-		//cout << endl << "Фигура" << endl;
+	virtual void show() {//виртуальный метод show
 		printf("\nФигура\n");
 	}
-	 ~Figure() {
-		printf("\nФигура удалена\n");
+	 ~Figure() {//виртуальный деструктор 
+		printf("Фигура удалена\n");
 	}
 }; 
 
-class Storage {
+class Storage { //класс хранилище
 private:
 	Figure** objects;
-	int size;
+	int size;//размер хранилища
 public:
 	Storage(int size) {
 		this->size = size;
 		objects = new Figure * [size];
 	}
-	void SetObject(int index, Figure* object) {
+	void SetObject(int index, Figure* object) {//устанавливает в индексе памяти object
 		objects[index] = object;
 	}
-	Figure& GetObject(int index) {
+	Figure& GetObject(int index) { //возвращает объект с индексом
 		return *objects[index];
 	}
-	void delete_obj(int index) {
-		objects[index]->~Figure();
+	void delete_obj(int index) {//удаляет объект
+		objects[index]->~Figure();//тогда вызывается деструктор 
 	}
-	void add(Figure* object) {
+	void add(Figure* object) {//добавляет объект 
 		Figure** object1 = new Figure * [size + 1];
 		for (int i = 0; i < size; i++)
 			object1[i] = objects[i];
@@ -46,11 +45,11 @@ public:
 		size++;
 		delete objects;
 		objects = object1;
-		printf("\nДобавлен объект \n");
+		printf("Добавлен объект ");
 		object->show();
-		//cout << "В индекс  " << size - 1 << endl << endl;
-		printf("В индекс ");
+		printf("в индекс ");
 		printf("%d", size - 1);
+		printf("\n\n");
 	}
 	int getCount() {
 		return size;
@@ -58,7 +57,7 @@ public:
 };
 
 
-class Point :public Figure {
+class Point :public Figure {//класс наследник от класса Figure
 private:
 	int x, y;
 public:
@@ -71,19 +70,18 @@ public:
 		this->y = y;
 	}
 	void show() {
-		printf("Точка\nКоординаты: ");
+		printf("Точка с координатами: ");
 		printf("%d %d", x, y);
 		printf("\n");
-		
 	}
 	~Point() {
-		printf("Точка удалена\nКоординаты: ");
-		printf("%d %d", x, y);
+		printf("Точка удалена с координатами:  ");
+		printf("%d %d %c", x, y, " ");
 		printf("\n");
 	}
 };
 
-class Section : public Figure {
+class Section : public Figure { // класс - композиция
 private:
 	Point* p1, * p2;
 	int x1, x2, y1, y2;
@@ -93,13 +91,15 @@ public:
 		p2 = new Point(rand() % 10, (rand() % 10));
 	}
 	void show() {
-		printf("Отрезок с точками: ");
-		; p1->show(); p2->show();
+		printf("\nОтрезок с точками: \n");
+		p1->show();
+		p2->show();
 		printf("\n");
 	}
 	~Section() {
-		printf("Отрезок с точками: ");
-		 p1->show(); p2->show();
+		printf("Отрезок с точками: \n");
+		 p1->show();
+		 p2->show();
 		 delete p1;
 		 delete p2;
 	}
@@ -113,7 +113,7 @@ int main() {
 	Figure* f;
 	srand(time(NULL));
 	setlocale(LC_ALL, "Rus");
-	Storage store(10);
+	Storage store(50);// создаем хранилищу с именем store
 	for (int i = 0; i < store.getCount(); i++) {
 		int a = rand() % 2 + 1;
 		if (a == 2)
@@ -125,27 +125,24 @@ int main() {
 		store.GetObject(i).show();
 	}
 
-
-
-	//cout << endl << store.getCount() << " - Размер хранилища " << endl;
 	printf("\n");
 	printf("%d", store.getCount());
-	printf(" - Размер хранилища \n");
+	printf(" - Размер хранилища \n\n");
 	unsigned int start_time = clock();
 	for (int i = 0; i < 100; i++) {
-		int luck = rand() % 4 + 1;
-		switch (luck) {
+		int p = rand() % 4 + 1;
+		switch (p) {
 		case 1:
-			luck = rand() % 2 + 1;
-			if (luck == 1) {
+			p = rand() % 2 + 1;
+			if (p == 1) {
 				f = new Point(rand() % 10, rand() % 10);
 			}
 			else
 				f = new Section();
 			break;
 		case 2:
-			luck = rand() % 2 + 1;
-			if (luck == 1) {
+			p = rand() % 2 + 1;
+			if (p == 1) {
 				f = new Point(rand() % 10, rand() % 10);
 			}
 			else
@@ -153,8 +150,7 @@ int main() {
 			store.add(f);
 			break;
 		case 3:
-			//cout << "Метод show\n";
-			printf("\nМетод show\n");
+			printf("Метод show\n");
 			store.GetObject(rand() % store.getCount()).show();
 			printf("\n");
 			break;
@@ -166,20 +162,20 @@ int main() {
 	}
 	unsigned int end_time = clock();
 	unsigned int search_time = end_time - start_time;
-	//cout <<  << search_time << endl;
-	printf("\nВремя работы программы =  ");
-	printf("%d", search_time, "\n");
+	printf("Время работы программы =  ");
+	printf("%d", search_time);
+	printf("\n");
 	system("pause");
 	system("cls");
 
 	start_time = clock();
 	for (int i = 0; i < 10000; i++) {
-		int luck = rand() % 4 + 1;
-		switch (luck) {
+		int p = rand() % 4 + 1;
+		switch (p) {
 
 		case 1:
-			luck = rand() % 2 + 1;
-			if (luck == 1) {
+			p = rand() % 2 + 1;
+			if (p == 1) {
 				f = new Point(rand() % 10, rand() % 10);
 			}
 			else
@@ -187,8 +183,8 @@ int main() {
 			break;
 
 		case 2:
-			luck = rand() % 2 + 1;
-			if (luck == 1) {
+			p = rand() % 2 + 1;
+			if (p == 1) {
 				f = new Point(rand() % 10, rand() % 10);
 			}
 			else
@@ -197,8 +193,7 @@ int main() {
 			break;
 
 		case 3:
-			//cout << "Метод show\n";
-			printf("\nМетод show\n");
+			printf("Метод show\n");
 			store.GetObject(rand() % store.getCount()).show();
 			printf("\n");
 			break;
@@ -212,20 +207,21 @@ int main() {
 	}
 	end_time = clock();
 	search_time = end_time - start_time;
-	printf("\nВремя работы программы =  ");
-	printf("%d", search_time, "\n");
+	printf("Время работы программы =  ");
+	printf("%d", search_time);
+	printf("\n");
 	system("pause");
 	system("cls");
 
 
 	start_time = clock();
 	for (int i = 0; i < 1000; i++) {
-		int luck = rand() % 4 + 1;
-		switch (luck) {
+		int p = rand() % 4 + 1;
+		switch (p) {
 
 		case 1:
-			luck = rand() % 2 + 1;
-			if (luck == 1) {
+			p = rand() % 2 + 1;
+			if (p == 1) {
 				f = new Point(rand() % 10, rand() % 10);
 			}
 			else
@@ -233,8 +229,8 @@ int main() {
 			break;
 
 		case 2:
-			luck = rand() % 2 + 1;
-			if (luck == 1) {
+			p = rand() % 2 + 1;
+			if (p == 1) {
 				f = new Point(rand() % 10, rand() % 10);
 			}
 			else
@@ -243,8 +239,7 @@ int main() {
 			break;
 
 		case 3:
-			//cout << "Метод show\n";
-			printf("\nМетод show\n");
+			printf("Метод show\n");
 			store.GetObject(rand() % store.getCount()).show();
 			printf("\n");
 			break;
@@ -258,8 +253,9 @@ int main() {
 	}
 	end_time = clock();
 	search_time = end_time - start_time;
-	printf("\nВремя работы программы =  ");
-	printf("%d", search_time, "\n");
+	printf("Время работы программы =  ");
+	printf("%d", search_time);
+	printf("\n");
 	system("pause");
 	system("cls");
 }
